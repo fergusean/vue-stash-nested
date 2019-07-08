@@ -6,13 +6,6 @@ function plugin(Vue) {
         return;
     }
 
-    // Register a helper prototype property for store access.
-    Object.defineProperty(Vue.prototype, '$store', {
-        get() {
-            return this.$root.store;
-        }
-    });
-
     // Register a global mixin to manage the getters/setters for our store.
     Vue.mixin({
 

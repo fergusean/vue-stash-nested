@@ -1,23 +1,31 @@
 export default function(key) {
     return {
         get() {
-            return key.split('.').reduce((pValue, cValue) => {
+            let path = key.split('.');
+            return path.reduce((pValue, cValue) => {
                 return pValue[cValue];
-            }, this.$root.store)
+            }, getOwnerStore(this, path[0]));
         },
 
         set(value) {
-            var path = key.split('.');
-            var length = path.length - 1;
-            var store = this.$root.store;
+            let path = key.split('.');
+            let length = path.length - 1;
+            let store = getOwnerStore(this, path[0]);
 
-            for (var i = 0; i < length; i++) {
+            for (let i = 0; i < length; i++) {
                 if (store.hasOwnProperty(path[i])) {
                     store = store[path[i]];
                 }
             }
 
-            store[path[i]] = value;
+            store[path[length]] = value;
         }
     }
+}
+
+function getOwnerStore(src, key) {
+    do {
+        if (typeof src.$data.store !== 'undefined' && typeof src.$data.store[key] !== 'undefined')
+            return src.store;
+    } while (src = src.$parent);
 }
