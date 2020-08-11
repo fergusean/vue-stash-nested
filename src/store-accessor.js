@@ -27,5 +27,5 @@ function getOwnerStore(src, key) {
     do {
         if (typeof src.$data.store !== 'undefined' && typeof src.$data.store[key] !== 'undefined')
             return src.store;
-    } while (src = src.$parent);
+    } while (src = (src.$storeParent || src.$parent));
 }
